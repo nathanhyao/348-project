@@ -34,9 +34,51 @@ class DbService {
           resolve(results);
         });
       });
-      console.log(response);
+      // console.log(response);
       return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  async insertNewTask(taskDescription) {
+    try {
+      const dateAdded = new Date();
+      const insertId = await new Promise((resolve, reject) => {
+        const query = "INSERT INTO tasks (description, date_added) VALUES (?, ?);";
+
+        connection.query(query, [taskDescription, dateAdded], (err, result) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(result.insertId);
+        });
+      });
+      console.log(insertId);
+      return {
+        task_id: insertId,
+        description: taskDescription,
+        date_added: dateAdded
+      };
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async deleteRowById(id) {
+    try {
+      id = parseInt(id, 10);
+      const response = await new Promise((resolve, reject) => {
+        const query = "DELETE FROM tasks WHERE task_id = ?;";
+
+        connection.query(query, [id], (err, result) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(result);
+        });
+      });
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

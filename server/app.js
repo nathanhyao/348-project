@@ -12,7 +12,15 @@ app.use(express.urlencoded({ extended: false }));
 
 // create
 app.post('/insert', (request, response) => {
+  const { taskDescription } = request.body;
+  // console.log(taskDescription);
+  const db = dbService.getDbServiceInstance();
 
+  const result = db.insertNewTask(taskDescription);
+
+  result
+    .then(data => response.json({ data: data }))
+    .catch(err => console.log(err));
 });
 
 // read
@@ -22,15 +30,26 @@ app.get('/getAll', (request, response) => {
   const result = db.getAllData();
 
   result
-    .then()
-    .catch()
+    .then(data => response.json({ data: data }))
+    .catch(err => console.log(err));
 });
 
 // update
 
 
 // delete
+app.delete('/delete/:id', (request, response) => {
+  const { id } = request.params;
+  const db = dbService.getDbServiceInstance();
 
+  console.log(id);
+
+  const result = db.deleteRowById(id);
+
+  result
+    .then(data => response.json({ succes: true }))
+    .catch(err => console.log(err));
+})
 
 
 app.listen(process.env.PORT, () => console.log('app is running'));
