@@ -42,12 +42,11 @@ app.delete('/delete/:id', (request, response) => {
   const { id } = request.params;
   const db = dbService.getDbServiceInstance();
 
-  console.log(id);
-
+  console.log("Deleting task with id " + id);
   const result = db.deleteRowById(id);
 
   result
-    .then(data => response.json({ succes: true }))
+    .then(data => response.json({ success: data }))
     .catch(err => console.log(err));
 })
 

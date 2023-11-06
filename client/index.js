@@ -17,7 +17,11 @@ function deleteRowById(id) {
     method: 'DELETE',
   })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      }
+    });
 }
 
 const addBtn = document.querySelector('#add-task-btn');
@@ -69,7 +73,7 @@ function loadHTMLTable(data) {
   const table = document.querySelector('table tbody');
 
   if (data.length === 0) {
-    table.innerHTML = "<tr><td class='no-data' colspan='5'>No Tasks</td></tr>";
+    table.innerHTML = "<tr><td class='no-data' colspan='5'>No Tasks!</td></tr>";
     return;
   }
 
