@@ -5,20 +5,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="stylesheet.css">
-  <title>Taskboard Web App</title>
+  <title>TaskBoard Web App</title>
 </head>
 
 <body>
   <main>
+    <h1>TaskBoard</h1>
     <label>Description:</label>
-    <input type="text" id="task-input">
+    <input type="text" placeholder="task description" id="task-input">
     <button id="add-task-btn">Add Task</button>
 
     <br><br><br>
-    <!-- <div>
+    <div>
       <input placeholder="search by description" id="search-input">
       <button id="search-btn">Search</button>
-    </div> -->
+    </div>
 
     <table id="table">
       <thead>
@@ -30,6 +31,12 @@
       </thead>
       <tbody></tbody>
     </table>
+
+    <section hidden id="update-section">
+      <label>Update Description:</label>
+      <input type="text" id="update-task-input">
+      <button id="update-row-btn">Update</button>
+    </section>
   </main>
   <script src="index.js"></script>
 </body>

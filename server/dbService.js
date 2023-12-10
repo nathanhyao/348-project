@@ -46,7 +46,6 @@ class DbService {
       const dateAdded = new Date();
       const insertId = await new Promise((resolve, reject) => {
         const query = "INSERT INTO tasks (description, date_added) VALUES (?, ?);";
-
         connection.query(query, [taskDescription, dateAdded], (err, result) => {
           if (err) {
             reject(new Error(err.message));
@@ -70,8 +69,27 @@ class DbService {
       id = parseInt(id, 10);
       const response = await new Promise((resolve, reject) => {
         const query = "DELETE FROM tasks WHERE task_id = ?;";
-
         connection.query(query, [id], (err, result) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(result.affectedRows);
+        });
+      });
+      // console.log(response);
+      return response === 1 ? true : false;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async updateTaskById(task, id) {
+    try {
+      id = parseInt(id, 10);
+      const response = await new Promise((resolve, reject) => {
+        const query = "UPDATE tasks SET description = ? WHERE task_id = ?;";
+        connection.query(query, [task, id], (err, result) => {
           if (err) {
             reject(new Error(err.message));
           }

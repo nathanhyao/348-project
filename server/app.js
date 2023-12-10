@@ -35,10 +35,22 @@ app.get('/getAll', (request, response) => {
 });
 
 // update
+app.patch('/update', (request, response) => {
+  console.log(`update/ request.body is ${request.body}`);
+  const { id, task } = request.body;
+  const db = dbService.getDbServiceInstance();
 
+  console.log("Updating task with id " + id);
+  const result = db.updateTaskById(task, id);
+
+  result
+    .then(data => response.json({ success: data }))
+    .catch(err => console.log(err));
+});
 
 // delete
 app.delete('/delete/:id', (request, response) => {
+  console.log(`delete/ request.params is ${request.params}`);
   const { id } = request.params;
   const db = dbService.getDbServiceInstance();
 

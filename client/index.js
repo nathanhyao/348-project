@@ -4,13 +4,52 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(data => loadHTMLTable(data['data']));
 });
 
-// Must dynamically listen for delete button on click (may not exist)
 document.querySelector('table tbody').addEventListener('click', function (event) {
-  console.log(event.target);
+
+  /* Must dynamically listen for delete button on click. */
+  console.log(`click event.target is ${event.target}`);
   if (event.target.className === "delete-row-btn") {
     deleteRowById(event.target.getAttribute("task-id"));
   }
+  if (event.target.className === "edit-row-btn") {
+    handleEditRow(event.target.getAttribute("task-id"));
+  }
 });
+
+/* Edit/update task functionality */
+
+function handleEditRow(id) {
+  const updateSection = document.querySelector("#update-section");
+  updateSection.hidden = false;
+  document.querySelector('#update-row-btn').dataset.id = id;
+}
+
+const updateBtn = document.querySelector("#update-row-btn");
+
+updateBtn.onclick = function () {
+  const updatedTaskInput = document.querySelector('#update-task-input');
+  // console.log(`updatedTaskInput.dataset.id: ${updatedTaskInput.dataset.id}`);
+
+  fetch('http://localhost:5000/update', {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: updateBtn.dataset.id,
+      task: updatedTaskInput.value
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(`update task got data: ${data}`);
+      if (data.success) {
+        location.reload();
+      }
+    });
+}
+
+/* Delete task functionality */
 
 function deleteRowById(id) {
   fetch('http://localhost:5000/delete/' + id, {
@@ -18,11 +57,14 @@ function deleteRowById(id) {
   })
     .then(response => response.json())
     .then(data => {
+      console.log(`deleteRowById data: ${data}`);
       if (data.success) {
         location.reload();
       }
     });
 }
+
+/* Add task functionality */
 
 const addBtn = document.querySelector('#add-task-btn');
 
@@ -68,6 +110,8 @@ function insertRowIntoTable(data) {
     newRow.innerHTML = tableHTML;
   }
 }
+
+/* Load initial page */
 
 function loadHTMLTable(data) {
   const table = document.querySelector('table tbody');
