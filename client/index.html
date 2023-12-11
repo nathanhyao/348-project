@@ -11,13 +11,14 @@
 <body>
   <main>
     <h1>TaskBoard</h1>
-    <label>Description:</label>
-    <input type="text" placeholder="task description" id="task-input">
-    <button id="add-task-btn">Add Task</button>
+    <label>Task description:</label>
+    <input type="text" placeholder="write task description" id="task-input">
+    <button id="add-task-btn">Add task</button>
 
     <br><br><br>
     <div>
-      <input placeholder="search by description" id="search-input">
+      <button id="view-all-btn">View all tasks</button>
+      <input placeholder="search by keyword" id="search-input">
       <button id="search-btn">Search</button>
     </div>
 
@@ -33,10 +34,17 @@
     </table>
 
     <section hidden id="update-section">
-      <label>Update Description:</label>
+      <label>Update task description:</label>
       <input type="text" id="update-task-input">
       <button id="update-row-btn">Update</button>
+      <br><br><br>
     </section>
+
+    <div>
+      <button id="delete-all-btn">Delete all tasks</button>
+      <input placeholder="delete by keyword" id="delete-input">
+      <button id="delete-keyword-btn">Delete</button>
+    </div>
   </main>
   <script src="index.js"></script>
 </body>

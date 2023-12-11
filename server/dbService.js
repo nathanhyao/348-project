@@ -103,6 +103,63 @@ class DbService {
       return false;
     }
   }
+
+  async searchByKeyword(keyword) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        // const query = "SELECT * FROM tasks WHERE description = ?;";
+        const query = 'SELECT * FROM tasks WHERE description LIKE ?;';
+        connection.query(query, ['%' + keyword + '%'], (err, results) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(results);
+        });
+      });
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /* Calling STORED PROCEDURE (deleteByKeyword) */
+  async deleteByKeyword(keyword) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = "CALL deleteByKeyword( ? );";
+        connection.query(query, [keyword], (err, results) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(results);
+        });
+      });
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /* Calling STORED PROCEDURE (deleteAll) */
+  async deleteAll() {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = "CALL deleteAll();";
+        connection.query(query, (err, results) => {
+          if (err) {
+            reject(new Error(err.message));
+          }
+          resolve(results);
+        });
+      });
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = DbService;

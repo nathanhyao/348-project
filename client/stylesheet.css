@@ -24,3 +24,8 @@ th,
 td {
   padding: 5px;
 }
+
+#view-all-btn,
+#delete-all-btn {
+  margin-right: 1.25em;
+}

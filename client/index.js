@@ -16,12 +16,30 @@ document.querySelector('table tbody').addEventListener('click', function (event)
   }
 });
 
+/* Search/filter functionality */
+
+const searchBtn = document.querySelector("#search-btn");
+const viewAllBtn = document.querySelector("#view-all-btn");
+
+searchBtn.onclick = function () {
+  const keyword = document.querySelector("#search-input").value;
+
+  fetch("http://localhost:5000/search/" + keyword)
+    .then(response => response.json())
+    .then(data => loadHTMLTable(data['data']));
+}
+
+viewAllBtn.addEventListener("click", (e) => {
+  location.reload();
+});
+
 /* Edit/update task functionality */
 
 function handleEditRow(id) {
   const updateSection = document.querySelector("#update-section");
   updateSection.hidden = false;
   document.querySelector('#update-row-btn').dataset.id = id;
+  document.querySelector('#update-task-input').placeholder = `update task with id ${id}`;
 }
 
 const updateBtn = document.querySelector("#update-row-btn");
@@ -111,13 +129,46 @@ function insertRowIntoTable(data) {
   }
 }
 
+/* Delete by keyword functionality (STORED PROCEDURES) */
+
+deleteByKeywordBtn = document.querySelector('#delete-keyword-btn');
+deleteAllBtn = document.querySelector('#delete-all-btn');
+
+deleteByKeywordBtn.onclick = function () {
+  const keyword = document.querySelector("#delete-input").value;
+
+  fetch('http://localhost:5000/delete/keyword/' + keyword, {
+    method: 'DELETE',
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(`deleteByKeyword data: ${data}`);
+      if (data.success) {
+        location.reload();
+      }
+    });
+}
+
+deleteAllBtn.onclick = function () {
+  fetch('http://localhost:5000/deleteAll', {
+    method: 'DELETE',
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(`deleteAll data: ${data}`);
+      if (data.success) {
+        location.reload();
+      }
+    });
+}
+
 /* Load initial page */
 
 function loadHTMLTable(data) {
   const table = document.querySelector('table tbody');
 
   if (data.length === 0) {
-    table.innerHTML = "<tr><td class='no-data' colspan='5'>No Tasks!</td></tr>";
+    table.innerHTML = "<tr><td class='no-data' colspan='5'>No Tasks Found!</td></tr>";
     return;
   }
 

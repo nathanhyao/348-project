@@ -48,7 +48,7 @@ app.patch('/update', (request, response) => {
     .catch(err => console.log(err));
 });
 
-// delete
+// delete by id
 app.delete('/delete/:id', (request, response) => {
   console.log(`delete/ request.params is ${request.params}`);
   const { id } = request.params;
@@ -60,7 +60,44 @@ app.delete('/delete/:id', (request, response) => {
   result
     .then(data => response.json({ success: data }))
     .catch(err => console.log(err));
-})
+});
 
+// search/filter
+app.get('/search/:keyword', (request, response) => {
+  const { keyword } = request.params;
+  const db = dbService.getDbServiceInstance();
+
+  console.log("Searching with keyword " + keyword);
+  const result = db.searchByKeyword(keyword);
+
+  result
+    .then(data => response.json({ data: data }))
+    .catch(err => console.log(err));
+});
+
+// delete by keyword
+app.delete('/delete/keyword/:keyword', (request, response) => {
+  const { keyword } = request.params;
+  const db = dbService.getDbServiceInstance();
+
+  console.log("Deleting with keyword " + keyword);
+  const result = db.deleteByKeyword(keyword);
+
+  result
+    .then(data => response.json({ success: data }))
+    .catch(err => console.log(err));
+});
+
+// delete all
+app.delete('/deleteAll', (request, response) => {
+  const db = dbService.getDbServiceInstance();
+
+  console.log("Deleting all tasks...");
+  const result = db.deleteAll();
+
+  result
+    .then(data => response.json({ success: data }))
+    .catch(err => console.log(err));
+});
 
 app.listen(process.env.PORT, () => console.log('app is running'));
